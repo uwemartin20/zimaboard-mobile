@@ -3,6 +3,7 @@ import * as DocumentPicker from "expo-document-picker";
 import React, { useEffect, useMemo, useState } from "react";
 import {
     ActivityIndicator,
+    Alert,
     Modal,
     ScrollView,
     StyleSheet,
@@ -85,6 +86,10 @@ export default function NewMessage({ mode, visible, onSaved, onClose, message }:
     };
 
     const handleSubmit = async () => {
+        if (!title || !description || !statusId) {
+              Alert.alert("Fehler", "Bitte füllen Sie Titel, Beschreibung und Statusfelder aus!");
+              return;
+        }
         setLoading(true);
         try {
             let messageId: number;

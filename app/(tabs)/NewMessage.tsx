@@ -6,6 +6,7 @@ import { useRouter } from "expo-router";
 import React, { useEffect, useMemo, useState } from "react";
 import {
   ActivityIndicator,
+  Alert,
   ScrollView,
   StyleSheet,
   Text,
@@ -73,8 +74,10 @@ export default function NewMessage() {
   };
 
   const handleSubmit = async () => {
-    if (!title || !description || !statusId) return;
-
+    if (!title || !description || !statusId) {
+      Alert.alert("Fehler", "Bitte füllen Sie Titel, Beschreibung und Statusfelder aus!");
+      return;
+    }
     setLoading(true);
 
     try {

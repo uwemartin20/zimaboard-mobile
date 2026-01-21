@@ -37,7 +37,7 @@ export default function Board({ type }: BoardProps) {
         try {
             const params: any = {};
             if (filterArchived !== null) params.is_archived = filterArchived;
-            if (filterCreator) params.creator_id = filterCreator;
+            if (filterCreator) params.creator_id = Number(filterCreator);
             if (filterPriority) params.priority = filterPriority;
             if (filterStatus) params.status = filterStatus;
             const res = await api.get(`/${type}`, { params });
@@ -98,11 +98,12 @@ export default function Board({ type }: BoardProps) {
                     >
                         <Picker.Item label="Alle Ersteller" value="" />
                         {messages
-                        .map((m) => m.creator?.name)
-                        .filter((v, i, a) => v && a.indexOf(v) === i)
-                        .map((name) => (
-                            <Picker.Item key={name} label={name!} value={name!} />
-                        ))}
+                            .map((m) => m.creator)
+                            .filter((v, i, a) => v && a.findIndex(x => x?.id === v.id) === i)
+                            .map((creator) => (
+                                <Picker.Item key={creator!.id} label={creator!.name} value={creator?.id.toString()} />
+                            ))
+                        }
                     </Picker>
                 </View>
 

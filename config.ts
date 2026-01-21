@@ -17,7 +17,7 @@ const configs: Record<string, EnvConfig> = {
   },
   production: {
     APP_ENV: 'prod',
-    API_BASE_URL: 'http://zimaboard-api.zmwl.local/api',
+    API_BASE_URL: 'https://zimaboard-api.zmwl.local/api',
     PUSHER_APP_KEY: 'e290aec7e9a9b2e47641',
   },
 };
