@@ -22,6 +22,10 @@ export const initPusher = async (userId: number, onMessage: (data: any) => void)
 
     const channel = pusher.subscribe(`private-${Config.APP_ENV}.user.${userId}`);
 
+    channel.bind("notification.created", (data: any) => {
+        onMessage(data);
+    });
+
     channel.bind("message.created", (data: any) => {
         onMessage(data);
     });

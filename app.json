@@ -20,11 +20,16 @@
       },
       "edgeToEdgeEnabled": false,
       "predictiveBackGestureEnabled": false,
-      "package": "com.hamzamehmood777.zimaboardmobile"
+      "package": "com.hamzamehmood777.zimaboardmobile",
+      "googleServicesFile": "./google-services.json"
     },
     "web": {
       "output": "static",
       "favicon": "./assets/images/zimmermann-logo-192.png"
+    },
+    "notification": {
+      "icon": "./assets/images/zimmermann-logo-192.png",
+      "color": "#ffffff"
     },
     "plugins": [
       "expo-router",

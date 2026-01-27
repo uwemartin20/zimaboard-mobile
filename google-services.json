@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "141810094667",
+    "project_id": "strange-reducer-312106",
+    "storage_bucket": "strange-reducer-312106.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:141810094667:android:695bd844651644c75cf3ce",
+        "android_client_info": {
+          "package_name": "com.hamzamehmood777.zimaboardmobile"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxX_46iSDGTvQs89JppGvNa249gBOASbE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -209,19 +209,50 @@ export default function MessageModal({ message, onClose, onArchiveToggle, onAddC
                             <ScrollView
                                 ref={scrollRef}
                                 style={{ maxHeight: 200 }}
+                                contentContainerStyle={{ gap: 6 }}
+                                onContentSizeChange={() =>
+                                    scrollRef.current?.scrollToEnd({ animated: true })
+                                }
                                 nestedScrollEnabled
                                 showsVerticalScrollIndicator
                             >
-                                {chatMessages.map((c) => (
-                                <View key={c.id} style={{ marginBottom: 8, borderBottomWidth: 0.5, borderBottomColor: "#d1d5db", paddingBottom: 4 }}>
-                                    <View style={{ flexDirection: "row", alignItems: "center", marginBottom: 2 }}>
-                                    <Icon name="comment-dots" size={14} color="#9ca3af" style={{ marginRight: 4 }} />
-                                    <Text style={{ fontWeight: "bold" }}>{c.user.name}</Text>
-                                    </View>
-                                    <Text style={{ marginLeft: 18 }}>{c.content}</Text>
-                                    <Text style={{ fontSize: 10, color: "#9ca3af", textAlign: "right" }}>{timeAgo(c.created_at)}</Text>
-                                </View>
-                                ))}
+                                {chatMessages.map((c) => {
+                                    const isMine = c.user.id === user?.id;
+                                    return (
+                                        <View
+                                            key={c.id}
+                                            style={[
+                                                styles.messageRow,
+                                                isMine ? styles.rowRight : styles.rowLeft,
+                                            ]}
+                                            >
+                                            <View
+                                                style={[
+                                                styles.bubble,
+                                                isMine ? styles.bubbleMine : styles.bubbleOther,
+                                                ]}
+                                            >
+                                                {/* Header */}
+                                                <View style={styles.bubbleHeader}>
+                                                <Text style={styles.author}>
+                                                    {isMine ? "Du" : c.user.name}
+                                                </Text>
+                                                <Text
+                                                    style={[
+                                                    styles.time,
+                                                    isMine ? styles.timeMine : styles.timeOther,
+                                                    ]}
+                                                >
+                                                    {timeAgo(c.created_at)}
+                                                </Text>
+                                                </View>
+                
+                                                {/* Message */}
+                                                <Text style={styles.messageText}>{c.content}</Text>
+                                            </View>
+                                        </View>
+                                    );
+                                })}
                             </ScrollView>
 
                             {/* Add new comment */}
@@ -353,4 +384,63 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         color: "#374151",
       },
+
+      commentsBox: {
+        borderWidth: 1,
+        borderColor: "#e5e7eb",
+        borderRadius: 8,
+        padding: 8,
+        maxHeight: 260,
+    },
+
+    messageRow: {
+        flexDirection: "row",
+    },
+    rowLeft: {
+        justifyContent: "flex-start",
+    },
+    rowRight: {
+        justifyContent: "flex-end",
+    },
+
+    bubble: {
+        maxWidth: "80%",
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 16,
+    },
+    bubbleMine: {
+        backgroundColor: "#8ea2ce",
+        color: "#ffffff",
+    },
+    bubbleOther: {
+        backgroundColor: "#e5e7eb",
+        color: "#000000",
+    },
+
+    bubbleHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 2,
+    },
+    author: {
+        fontSize: 11,
+        fontWeight: "500",
+    },
+
+    messageText: {
+        fontSize: 13,
+        lineHeight: 16,
+    },
+
+    timeMine: {
+        color: "#2c425e",
+    },
+    timeOther: {
+        color: "#575d68",
+    },    
+  
+    comment: { marginBottom: 8 },
+    commentAuthor: { fontWeight: "600" },
+    time: { fontSize: 10, color: "#6b7280" },
 });

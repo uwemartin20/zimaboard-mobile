@@ -2,11 +2,15 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { router } from 'expo-router';
 import api from "./client";
 
-export const login = async (email: string, password: string) => {
+export const login = async (email: string, password: string, expoPushToken: string | null) => {
     const response = await api.post("/login", { email, password });
-    console.log(response);
     await AsyncStorage.setItem("token", response.data.token);
     await AsyncStorage.setItem("user", JSON.stringify(response.data.user));
+
+    if (expoPushToken) {
+        await api.post('/push-token', { token: expoPushToken });
+    }
+
     return response.data.user;
 };
 

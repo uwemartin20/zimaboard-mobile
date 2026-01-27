@@ -44,11 +44,18 @@ export default function TabLayout() {
     if (!userId) return; // wait until we have userId
 
     initPusher(userId, (data) => {
-      if ("title" in data) {
-        addNotification(data.id, `Neue Nachricht von ${data.creator.name}: ${data.title}`);
-      } else if ("chat" in data) {
-        addNotification(data.chat.message_id, `Neuer Kommentar von ${data.chat.user.name}: ${data.chat.content}`);
-      }
+      addNotification({
+        id: data.id,
+        message_id: data.message_id,
+        message: data.message,
+        read: false,
+        timestamp: Date.now(),
+      });
+      // if ("title" in data) {
+      //   addNotification(data.id, `Neue Nachricht von ${data.creator.name}: ${data.title}`);
+      // } else if ("chat" in data) {
+      //   addNotification(data.chat.message_id, `Neuer Kommentar von ${data.chat.user.name}: ${data.chat.content}`);
+      // }
     });
   }, [userId, addNotification]);
 

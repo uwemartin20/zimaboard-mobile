@@ -6,7 +6,7 @@ import { FlatList, Modal, Pressable, StyleSheet, Text, View } from "react-native
 import { useNotifications } from "../context/NotificationContext";
 
 export default function NotificationBell() {
-    const { notifications, markAllAsRead, removeNotification } = useNotifications();
+    const { notifications, markAllAsRead, markAsRead, removeNotification } = useNotifications();
     const unreadCount = notifications.filter(n => !n.read).length;
     const [open, setOpen] = useState(false);
     const navigation = useNavigation();
@@ -39,22 +39,36 @@ export default function NotificationBell() {
                         ) : (
                             <FlatList
                                 data={notifications}
-                                keyExtractor={(item) => item.id}
+                                keyExtractor={(item) => item.id.toString()}
                                 style={{ maxHeight: 300 }}
                                 renderItem={({ item }) => (
-                                <Pressable
-                                    style={[styles.item, !item.read && styles.unread]}
-                                    onPress={() => {
-                                    router.push(`/message/${item.message_id}`);
-                                    removeNotification(item.id);
-                                    setOpen(false);
-                                    }}
-                                >
-                                    <Text>{item.message}</Text>
-                                    <Text style={styles.timestamp}>
-                                    {new Date(item.timestamp).toLocaleTimeString()}
-                                    </Text>
-                                </Pressable>
+                                    <View style={[styles.item, !item.read && styles.unread]}>
+
+                                    {/* Remove (X) Button */}
+                                    <Pressable
+                                      style={styles.removeButton}
+                                      onPress={() => removeNotification(item.id)}
+                                    >
+                                      <Text style={styles.removeText}>✕</Text>
+                                    </Pressable>
+                      
+                                    {/* Notification Body */}
+                                    <Pressable
+                                      onPress={() => {
+                                        if (!item.read) {
+                                          markAsRead(item.id);
+                                        }
+                                        router.push(`/message/${item.message_id}`);
+                                        setOpen(false);
+                                      }}
+                                    >
+                                        
+                                        <Text>{item.message}</Text>
+                                        <Text style={styles.timestamp}>
+                                            {new Date(item.timestamp).toLocaleTimeString()}
+                                        </Text>
+                                    </Pressable>
+                                </View>
                                 )}
                             />
                         )}
@@ -99,4 +113,15 @@ const styles = StyleSheet.create({
     item: { padding: 12, borderBottomWidth: 1, borderColor: "#eee" },
     unread: { backgroundColor: "#e6f0ff" },
     timestamp: { fontSize: 10, color: "#888", marginTop: 2 },
+    removeButton: {
+        position: "absolute",
+        top: 6,
+        right: 6,
+        zIndex: 10,
+        padding: 4,
+    },
+    removeText: {
+        fontSize: 14,
+        color: "#9ca3af",
+    },
 });

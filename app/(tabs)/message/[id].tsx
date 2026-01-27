@@ -249,19 +249,58 @@ export default function MessageDetail() {
             <View style={styles.section}>
                 <Text style={styles.sectionTitle}>Kommentare</Text>
 
-                <ScrollView ref={scrollRef} style={styles.commentsBox}>
-                {message.chat_messages.map(c => (
-                    <View key={c.id} style={styles.comment}>
-                    <Text style={styles.commentAuthor}>{c.user.name}</Text>
-                    <Text>{c.content}</Text>
-                    <Text style={styles.time}>{timeAgo(c.created_at)}</Text>
-                    </View>
-                ))}
+                <ScrollView 
+                    ref={scrollRef} 
+                    style={styles.commentsBox}
+                    contentContainerStyle={{ gap: 6, paddingBottom: 8 }}
+                    onContentSizeChange={() =>
+                        scrollRef.current?.scrollToEnd({ animated: true })
+                    }
+                    nestedScrollEnabled
+                    showsVerticalScrollIndicator
+                >
+                {message.chat_messages.map(c => {
+                    const isMine = c.user.id === user?.id;
+                    return (
+                        <View
+                            key={c.id}
+                            style={[
+                                styles.messageRow,
+                                isMine ? styles.rowRight : styles.rowLeft,
+                            ]}
+                            >
+                            <View
+                                style={[
+                                styles.bubble,
+                                isMine ? styles.bubbleMine : styles.bubbleOther,
+                                ]}
+                            >
+                                {/* Header */}
+                                <View style={styles.bubbleHeader}>
+                                <Text style={styles.author}>
+                                    {isMine ? "Du" : c.user.name}
+                                </Text>
+                                <Text
+                                    style={[
+                                    styles.time,
+                                    isMine ? styles.timeMine : styles.timeOther,
+                                    ]}
+                                >
+                                    {timeAgo(c.created_at)}
+                                </Text>
+                                </View>
+
+                                {/* Message */}
+                                <Text style={styles.messageText}>{c.content}</Text>
+                            </View>
+                        </View>
+                    );
+                })}
                 </ScrollView>
 
                 <View style={styles.commentInput}>
                 <TextInput
-                    placeholder="Kommentar hinzufügen..."
+                    placeholder="Kommentar schreiben..."
                     value={newComment}
                     onChangeText={setNewComment}
                     style={styles.input}
@@ -376,17 +415,63 @@ const styles = StyleSheet.create({
     link: { color: "#2563eb", marginBottom: 4 },
   
     commentsBox: {
-        maxHeight: 240,
         borderWidth: 1,
         borderColor: "#e5e7eb",
         borderRadius: 8,
         padding: 8,
-        marginBottom: 8,
+        maxHeight: 260,
     },
+
+    messageRow: {
+        flexDirection: "row",
+    },
+    rowLeft: {
+        justifyContent: "flex-start",
+    },
+    rowRight: {
+        justifyContent: "flex-end",
+    },
+
+    bubble: {
+        maxWidth: "80%",
+        paddingHorizontal: 10,
+        paddingVertical: 6,
+        borderRadius: 16,
+    },
+    bubbleMine: {
+        backgroundColor: "#8ea2ce",
+        color: "#ffffff",
+    },
+    bubbleOther: {
+        backgroundColor: "#e5e7eb",
+        color: "#000000",
+    },
+
+    bubbleHeader: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        marginBottom: 2,
+    },
+    author: {
+        fontSize: 11,
+        fontWeight: "500",
+    },
+
+    messageText: {
+        fontSize: 13,
+        lineHeight: 16,
+    },
+
+    timeMine: {
+        color: "#2c425e",
+    },
+    timeOther: {
+        color: "#575d68",
+    },    
   
     comment: { marginBottom: 8 },
     commentAuthor: { fontWeight: "600" },
-    time: { fontSize: 11, color: "#6b7280" },
+    time: { fontSize: 10, color: "#6b7280" },
   
     commentInput: {
         flexDirection: "row",

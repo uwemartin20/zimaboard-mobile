@@ -1,4 +1,6 @@
 import { isLoggedIn, login } from '@/api/auth';
+import { useNotificationRouting } from '@/utils/useNotificationRouting';
+import { usePushNotifications } from '@/utils/usePushNotifications';
 import { router } from "expo-router";
 import React, { useState } from 'react';
 import {
@@ -19,15 +21,30 @@ export default function LoginScreen() {
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
+  // Send push token to backend if available
+  const { expoPushToken } = usePushNotifications();
+      
+  useNotificationRouting();
+
   const handleSubmit = async () => {
     try {
       setError('');
       setLoading(true);
-      await login(email, password);
+      await login(email, password, expoPushToken);
       // user is now logged in
       // app-level auth state should update here
     } catch (err: any) {
-      setError(err?.response?.data?.message || 'Fehler bei der Anmeldung');
+      if (err.response) {
+        // Server responded_attach
+        setError(err.response.data?.message || 'Serverfehler');
+      } else if (err.request) {
+        console.log(err)
+        // Request sent, no response
+        setError('Keine Verbindung zum Server');
+      } else {
+        // Something else
+        setError(err.message || 'Unbekannter Fehler');
+      }
     } finally {
         if (await isLoggedIn()) {
             setLoading(false);

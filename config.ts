@@ -1,5 +1,7 @@
 // config.ts
 
+
+
 type EnvConfig = {
     APP_ENV: string;
     API_BASE_URL: string;
@@ -7,12 +9,13 @@ type EnvConfig = {
 };
 
 // Set your environment here: 'development' or 'production'
-const APP_ENV = 'production'; // change only here for dev / prod
+const APP_ENV = 'development'; // change only here for dev / prod
 
 const configs: Record<string, EnvConfig> = {
   development: {
     APP_ENV: 'local',
-    API_BASE_URL: 'http://localhost:8080/api',
+    API_BASE_URL: 'http://10.0.0.166:8080/api',
+    // API_BASE_URL: Platform.OS === 'android' ? 'http://10.0.2.2:8080/api' : 'http://localhost:8080/api',
     PUSHER_APP_KEY: '2faa6528d6871c8c8a49',
   },
   production: {
