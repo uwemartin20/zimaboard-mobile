@@ -9,7 +9,7 @@ type EnvConfig = {
 };
 
 // Set your environment here: 'development' or 'production'
-const APP_ENV = 'development'; // change only here for dev / prod
+const APP_ENV = 'production'; // change only here for dev / prod
 
 const configs: Record<string, EnvConfig> = {
   development: {
